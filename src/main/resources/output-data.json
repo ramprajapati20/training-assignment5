@@ -1,0 +1,16 @@
+[
+	{
+		"Name": "ALPHA",
+		"Age": "12",
+		"City": "AL",
+		"State":"Haryana",
+		"Zip":"301303"
+	},
+	{
+		"Name": "BETA",
+		"Age": "13",
+		"City": "BE",
+		"State":"delhi",
+		"Zip":"110087"
+	}
+]

@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="emp-data" format="xml">
+      <types:example format="xml" element="data" location="output-data2.xml"/>
+    </types:type>
+    <types:type name="employee" format="xml">
+      <types:example format="xml" element="data" location="employee-data.xml"/>
+    </types:type>
+    <types:type name="emp-csv" format="csv">
+      <types:shape format="weave" example="employee-csv.csv"><![CDATA[%dw 2.0
+
+type emp_csv = Array<{|  Name: String,   Id: String,   Age: String,   Salary: String,   Address: String,   BOJ: String,   City: String,   State: String,   Zip: String|}>
+
+]]></types:shape>
+      <types:properties>
+        <types:property name="headerLineNumber" value="0"/>
+        <types:property name="header" value="true"/>
+        <types:property name="isQuotedString" value="false"/>
+        <types:property name="separator" value=","/>
+      </types:properties>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#b103dbd9-9bce-4c7e-8054-4ba5955580c1">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="employee"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="emp-data"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#b8635bf9-4a53-4189-88dc-9fedb8d4fdd7">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="emp-csv"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>

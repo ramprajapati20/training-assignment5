@@ -1,0 +1,18 @@
+<data>
+	<Employee>
+		<Name>Ram</Name>
+		<Age>30</Age>
+		<City>DELHI</City>
+		<State>Haryana</State>
+		<DOJ></DOJ>
+		<Zip>301303</Zip>
+	</Employee>
+	<Employee>
+		<Name>SHYAM</Name>
+		<Age>20</Age>
+		<City>Varanasi</City>
+		<State>Haryana</State>
+		<DOJ></DOJ>
+		<Zip>301303</Zip>
+	</Employee>
+</data>

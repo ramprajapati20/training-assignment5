@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="caf4da42-dddb-4efb-bf12-239a748072fc" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="training-assignment5Flow" doc:id="599795e9-2919-422c-ade4-ebdb6c3474fc" >
+		<http:listener doc:name="Listener" doc:id="da70cb1f-3419-4511-aae7-bf738e072649" config-ref="HTTP_Listener_config" path="/api/transform" allowedMethods="POST" outputMimeType="application/xml"/>
+		<set-variable value="#[message.attributes.version]" doc:name="Set Variable" doc:id="b76dd1d9-7ea7-4222-bcf8-845c295ff6b9" variableName="transactionId"/>
+		<ee:transform doc:name="Transform Message" doc:id="b103dbd9-9bce-4c7e-8054-4ba5955580c1" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+var totalEmp = 20
+fun updateName(mName: String) =
+	if(mName == 'Robin')
+		upper('Kumar')
+	else
+		upper('Singh')
+---
+{
+	data: {
+		(payload.data.*Employee map ( employee , index) -> {
+			Employee: {
+				Num: index,
+				Name: employee.Name,
+				Middle: updateName(employee.Name),
+				Age: employee.Age,
+				City: employee.City,
+				State: employee.State,
+				DOJ: employee.DOJ as Date {format: "yyyy/MM/dd"},
+				Zip: employee.Zip,
+				NoOfEmp: totalEmp
+			}
+		})
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="2343ccfb-6e00-4eb5-a867-47df86ae6577" />
+	</flow>
+	<flow name="training-assignment5Flow1" doc:id="51feb5cd-5a70-452c-b142-ed2eaf701c3b" >
+		<http:listener doc:name="Listener" doc:id="b793d756-d933-4b84-9c1f-6382b2ce77f3" config-ref="HTTP_Listener_config" path="/api/csvdata" allowedMethods="POST"/>
+		<ee:transform doc:name="Transform Message" doc:id="b8635bf9-4a53-4189-88dc-9fedb8d4fdd7" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="494a2155-0e95-4ed0-810c-8e8920cd2d57" />
+	</flow>
+</mule>
